@@ -1,0 +1,25 @@
+.env
+# Flutter / Dart
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/build/
+android/app/google-services.json
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Generated.xcconfig
+
+# IDE
+.vscode/
+.idea/
+*.iml

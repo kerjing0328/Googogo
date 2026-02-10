@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="aidcess">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>AidCess Authority Dashboard</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // 1. The callback that Google Maps will call when loaded
+    function initMap() {
+      console.log("Google Maps loaded!");
+      // Call Dart callback if it exists
+      if (window.dartMapsReady) {
+        window.dartMapsReady();
+      }
+    }
+
+    // 2. Helper function to inject the script dynamically using the key from Dart
+    function loadMapsScript(apiKey) {
+      console.log("Injecting Google Maps script...");
+      var script = document.createElement('script');
+      // Construct the URL with the provided API Key
+      script.src = "https://maps.googleapis.com/maps/api/js?key=" + apiKey + "&libraries=places&callback=initMap";
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  </script>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
