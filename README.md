@@ -43,18 +43,6 @@ This project aligns with the following UN SDGs:
 
 ## 🛠 Technologies Overview
 
-### Google Technologies
-* **Gemini API:** Used for analyzing sidewalk images to detect damage categories (cracks, uneven surfaces) and assign severity scores.
-* **Google Maps SDK:** Fetches base pedestrian routes which are then re-ranked based on accessibility data.
-* **Firebase Ecosystem:**
-    * **Authentication:** Role-based access control.
-    * **Firestore:** Database for storing damage reports and accessibility scores.
-    * **Cloud Storage:** Hosting user-uploaded images.
-    * **Cloud Functions:** Backend processing and automation.
-
-### Frontend & UI
-* **Framework:** Flutter (Android & iOS).
-* **Accessibility UI:** Features large text support and voice interaction capabilities.
 
 ---
 
