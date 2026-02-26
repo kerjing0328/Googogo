@@ -1,9 +1,11 @@
-# Googogo: AI-Powered Accessible Navigation & Civic Reporting
+# AidCess: AI Pedestrian Damage Reporting & Smart Route Assistant
+
+<img width="1920" height="1080" alt="Googogo" src="https://github.com/user-attachments/assets/c19c31d7-9b2d-427a-a3d7-ea385e5ce24b" />
 
 ## 📋 Repository Overview
-**Project Name:** Googogo
-**Focus:** AI-driven accessibility, smart city civic reporting and pedestrian navigation.
-**Status:** MVP Prototype
+* **Project Name:** Googogo
+* **Focus:** AI-driven accessibility, smart city civic reporting and pedestrian navigation.
+* **Status:** MVP Prototype
 
 ### 👥 Team Intro
 * Ng Ker Jing
@@ -43,27 +45,33 @@ This project aligns with the following UN SDGs:
 
 ## 🛠 Technologies Overview
 
-### Google Technologies
-* **Gemini API:** Used for analyzing sidewalk images to detect damage categories (cracks, uneven surfaces) and assign severity scores.
-* **Google Maps SDK:** Fetches base pedestrian routes which are then re-ranked based on accessibility data.
-* **Firebase Ecosystem:**
-    * **Authentication:** Role-based access control.
-    * **Firestore:** Database for storing damage reports and accessibility scores.
-    * **Cloud Storage:** Hosting user-uploaded images.
-    * **Cloud Functions:** Backend processing and automation.
+Googogo is powered by a robust stack of Google technologies to ensure scalable performance, real-time data synchronization, and advanced AI capabilities across our architecture:
 
-### Frontend & UI
-* **Framework:** Flutter (Android & iOS).
-* **Accessibility UI:** Features large text support and voice interaction capabilities.
+<img width="1920" height="1080" alt="technical" src="https://github.com/user-attachments/assets/b1c6edb1-fb5f-4fc1-8255-4952a1952053" />
+
+* **Flutter (Dart):** Powers the cross-platform frontend for both the Volunteer Mobile App (Android/iOS) and the Authority Web Dashboard.
+* **Google Gemini (2.5 Flash):** Acts as the core of our Data Ingestion Pipeline. It analyzes user-uploaded photos to verify valid outdoor images, classify the specific type of infrastructure damage, and automatically assign a severity score.
+* **Google Maps Platform (Accessible Navigation Pipeline):**
+  * **Places API:** Provides real-time autocomplete suggestions for pedestrian destinations.
+  * **Directions API:** Fetches accurate pedestrian routes for evaluation.
+  * **Maps SDK:** Renders the interactive visual map for navigation and hazard plotting.
+* **Firebase Suite (Backend):**
+  * **Authentication:** Manages secure sign-ins for pedestrians and urban planners.
+  * **Firestore Database:** Handles metadata persistence for issue reports and fetches real-time "barrier" data to calculate route accessibility scores.
+  * **Cloud Storage:** Securely hosts the uploaded images of infrastructure damage.
+
+*(Additional Flutter libraries include `image_picker`, `geolocator`, `geocoding`, and `flutter_tts` for voice guidance).*
 
 ---
 
 ## ⚙️ Implementation & System Architecture
 
+<img width="1920" height="1080" alt="userflow" src="https://github.com/user-attachments/assets/d8120244-1bfc-418b-b3a5-a464c3383b3f" />
+
 ### 1. Volunteer Damage Reporting Flow
 Volunteers capture images of sidewalks using the mobile app. The AI analyzes the image to detect damage categories and severity (1-10). The user confirms the AI output, and the data is stored in Firestore with GPS location and timestamps.
 
-### 2. Automated Authority Reporting Flow
+### 2. Autority Monitoring Flow
 The system identifies the local authority (PBT) based on the report's geolocation. A structured report—containing the geo-tagged image, damage category, and severity score—is automatically sent via API or email to the authority's dashboard. The system tracks the status from "Submitted" to "Resolved".
 
 ### 3. Pedestrian Navigation Flow
@@ -87,28 +95,87 @@ When a user enters a destination and selects their mobility mode, the app fetche
 
 ---
 
-## 📥 Installation & Setup
+## ⚙️ Installation & Setup
 
-*(Note: Please ensure you have the Flutter SDK and a Firebase project set up).*
+To optimize performance and security, this project utilizes a single Flutter codebase with two distinct entry points. This separates our **Volunteer Mobile App** from our **Authority Web Dashboard**.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-username/googogo.git](https://github.com/your-username/googogo.git)
-    cd googogo
-    ```
+### Prerequisites
+* [Flutter SDK](https://docs.flutter.dev/get-started/install) (Version 3.x or higher)
+* Android Studio or Xcode (for running the mobile emulator)
+* Google Chrome (required for testing the web dashboard)
+* Git
 
-2.  **Install dependencies:**
-    ```bash
-    flutter pub get
-    ```
+**1. Clone the repository**
+```bash
+git clone https://github.com/kerjing0328/Googogo.git
+cd googogo
+```
 
-3.  **Configure Firebase:**
-    * Add your `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) to the respective directories.
+**2. Install dependencies**
+```bash
+flutter pub get
+```
 
-4.  **Environment Variables:**
-    * Create a `.env` file and add your Gemini API Key and Google Maps API Key.
+**3. Configure Environment Variables**
+This project uses a `.env` file to securely manage API keys for Gemini, Google Maps and Firebase App Check. Create a file named `.env` in the root directory of the project and add the following keys:
 
-5.  **Run the app:**
-    ```bash
-    flutter run
-    ```
+```env
+# Google Maps & Gemini
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+GEMINI_API_KEY=your_gemini_api_key
+
+# Firebase Web
+FIREBASE_WEB_API_KEY=your_firebase_web_api_key
+FIREBASE_WEB_APP_ID=your_firebase_web_app_id
+FIREBASE_WEB_MESSAGING_SENDER_ID=your_firebase_web_sender_id
+FIREBASE_WEB_PROJECT_ID=your_firebase_web_project_id
+FIREBASE_WEB_AUTH_DOMAIN=your_firebase_web_auth_domain
+FIREBASE_WEB_STORAGE_BUCKET=your_firebase_web_storage_bucket
+FIREBASE_WEB_MEASUREMENT_ID=your_firebase_web_measurement_id
+
+# Firebase Android
+FIREBASE_ANDROID_API_KEY=your_firebase_android_api_key
+FIREBASE_ANDROID_APP_ID=your_firebase_android_app_id
+
+# Firebase iOS
+FIREBASE_IOS_API_KEY=your_firebase_ios_api_key
+FIREBASE_IOS_APP_ID=your_firebase_ios_app_id
+FIREBASE_IOS_BUNDLE_ID=your_firebase_ios_bundle_id
+```
+
+**4. Firebase Configuration**
+The `firebase_options.dart` file is already included in this repository. Ensure your local environment is authorized if you are swapping to a custom Firebase testing instance.
+
+## 🚀 Running the Applications
+
+### 📱 1. Running the Volunteer App (Mobile)
+This app is designed for Android/iOS users to navigate and report damages.
+**To run on an emulator or connected mobile device:**
+```bash
+flutter run -t lib/main_mobile.dart
+```
+
+### 💻 2. Running the Authority Dashboard (Web)
+This dashboard is built for authorities to monitor incoming civic reports. It bypasses the mobile authentication wrapper for direct access and injects the required web-specific mapping scripts.
+
+**To run on Google Chrome:**
+```bash
+flutter run -d chrome -t lib/main_web.dart
+```
+---
+
+## 📦 Building for Production
+
+To compile release versions of the platforms:
+
+**Build Android APK:**
+```bash
+flutter build apk -t lib/main_mobile.dart
+```
+
+**Build Web Release:**
+```bash
+flutter build web -t lib/main_web.dart
+```
+
+
