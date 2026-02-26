@@ -1,9 +1,11 @@
-# Googogo: AI-Powered Accessible Navigation & Civic Reporting
+# Googogo: AI Pedestrian Damage Reporting & Smart Route Assistant
+
+<img width="1920" height="1080" alt="Googogo" src="https://github.com/user-attachments/assets/c19c31d7-9b2d-427a-a3d7-ea385e5ce24b" />
 
 ## 📋 Repository Overview
-**Project Name:** Googogo
-**Focus:** AI-driven accessibility, smart city civic reporting and pedestrian navigation.
-**Status:** MVP Prototype
+* **Project Name:** Googogo
+* **Focus:** AI-driven accessibility, smart city civic reporting and pedestrian navigation.
+* **Status:** MVP Prototype
 
 ### 👥 Team Intro
 * Ng Ker Jing
@@ -105,7 +107,7 @@ To optimize performance and security, this project utilizes a single Flutter cod
 
 **1. Clone the repository**
 ```bash
-git clone [https://github.com/yourusername/googogo.git](https://github.com/yourusername/googogo.git)
+git clone https://github.com/kerjing0328/Googogo.git
 cd googogo
 ```
 
