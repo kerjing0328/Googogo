@@ -7,24 +7,28 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/route_step.dart';
 
 class NavigationService {
-  final String _apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
+  String get _apiKey => dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
 
   Future<List<dynamic>> fetchPlaceSuggestions(String input) async {
-    String url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$_apiKey";
+    final String url =
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$_apiKey";
+    
     try {
       final response = await http.get(Uri.parse(url));
       final json = jsonDecode(response.body);
-      if (json['status'] == 'OK') return json['predictions'];
+      if (json['status'] == 'OK') {
+        return json['predictions'];
+      }
     } catch (e) {
-      print(e);
+      print("Error fetching suggestions: $e");
     }
     return [];
   }
 
-  Future<Map<String, dynamic>> calculateRoute(LatLng origin, String destinationInput) async {
-    double destLat = 0, destLng = 0;
-    
-    // 1. Get Destination Coordinates
+  Future<List<Map<String, dynamic>>> calculateRoutes(LatLng origin, String destinationInput) async {
+    double destLat = 0;
+    double destLng = 0;
+
     try {
       List<Location> locations = await locationFromAddress(destinationInput);
       if (locations.isNotEmpty) {
@@ -32,39 +36,54 @@ class NavigationService {
         destLng = locations.first.longitude;
       }
     } catch (e) {
-      // Fallback if geocoding fails (demo purpose from original code)
+      print("Geocoding failed, using fallback offset.");
       destLat = origin.latitude + 0.005;
       destLng = origin.longitude + 0.005;
     }
 
-    // 2. Fetch Directions
-    String url = "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=$destLat,$destLng&mode=walking&key=$_apiKey";
+    final String url =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=$destLat,$destLng&mode=walking&alternatives=true&key=$_apiKey";
+
     final response = await http.get(Uri.parse(url));
     final json = jsonDecode(response.body);
 
-    if (json['status'] == 'OK' && json['routes'].isNotEmpty) {
-      var bestRoute = json['routes'][0];
-      List<dynamic> stepsData = bestRoute['legs'][0]['steps'];
-      
-      List<RouteStep> navSteps = stepsData.map((step) {
-        String text = step['html_instructions'].replaceAll(RegExp(r'<[^>]*>'), '');
-        return RouteStep(
-          instruction: text,
-          endLocation: LatLng(step['end_location']['lat'], step['end_location']['lng']),
-        );
-      }).toList();
+    if (json['status'] == 'OK' && (json['routes'] as List).isNotEmpty) {
+      List<Map<String, dynamic>> routeOptions = [];
 
-      String points = bestRoute['overview_polyline']['points'];
-      List<PointLatLng> result = PolylinePoints().decodePolyline(points);
-      List<LatLng> polylineCoords = result.map((p) => LatLng(p.latitude, p.longitude)).toList();
+      for (var routeData in json['routes']) {
+        
+        String encodedPoints = routeData['overview_polyline']['points'];
+        List<PointLatLng> decodedPoints = PolylinePoints().decodePolyline(encodedPoints);
+        List<LatLng> polylineCoords = decodedPoints
+            .map((p) => LatLng(p.latitude, p.longitude))
+            .toList();
 
-      return {
-        'steps': navSteps,
-        'polyline': polylineCoords,
-        'destLat': destLat,
-        'destLng': destLng,
-      };
+        List<dynamic> stepsData = routeData['legs'][0]['steps'];
+        List<RouteStep> navSteps = stepsData.map((step) {
+          String text = step['html_instructions'].replaceAll(RegExp(r'<[^>]*>'), '');
+          return RouteStep(
+            instruction: text,
+            endLocation: LatLng(step['end_location']['lat'], step['end_location']['lng']),
+          );
+        }).toList();
+
+        var leg = routeData['legs'][0];
+        
+        routeOptions.add({
+          'polyline': polylineCoords,
+          'steps': navSteps,
+          'bounds': routeData['bounds'],
+          'summary': routeData['summary'] ?? 'Route', 
+          'distance': leg['distance']['text'],
+          'duration': leg['duration']['text'],
+          'destLat': destLat,
+          'destLng': destLng,
+        });
+      }
+
+      return routeOptions;
     }
-    throw Exception("Route not found");
+
+    throw Exception("No routes found");
   }
 }

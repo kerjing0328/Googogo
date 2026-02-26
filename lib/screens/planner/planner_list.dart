@@ -43,9 +43,9 @@ class _PlannerListState extends State<PlannerList> {
 
   Color _getStatusColor(String? status) {
     switch (status?.toLowerCase()) {
-      case 'resolved': return const Color(0xFF48A89D); // Teal
+      case 'resolved': return const Color(0xFF48A89D); 
       case 'in progress': return Colors.orange;
-      case 'acknowledged': return const Color(0xFF4953B9); // Indigo
+      case 'acknowledged': return const Color(0xFF4953B9); 
       default: return Colors.grey;
     }
   }
@@ -53,10 +53,9 @@ class _PlannerListState extends State<PlannerList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Uses shell background
+      backgroundColor: Colors.transparent, 
       body: Column(
         children: [
-          // 1. HEADER & FILTERS
           Container(
             color: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -72,7 +71,6 @@ class _PlannerListState extends State<PlannerList> {
                 ),
                 const SizedBox(height: 16),
                 
-                // Search
                 TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
@@ -87,7 +85,6 @@ class _PlannerListState extends State<PlannerList> {
                 ),
                 const SizedBox(height: 16),
 
-                // Filters Row
                 Row(
                   children: [
                     Expanded(child: _buildDropdown("Region", _availableStates, _selectedState, (val) => setState(() => _selectedState = val!))),
@@ -97,7 +94,6 @@ class _PlannerListState extends State<PlannerList> {
                     Expanded(child: _buildDropdown("Severity", _severityOptions, _selectedSeverity, (val) => setState(() => _selectedSeverity = val!))),
                     const SizedBox(width: 12),
                     
-                    // Sort Button
                     Container(
                       height: 50,
                       decoration: BoxDecoration(
@@ -118,7 +114,6 @@ class _PlannerListState extends State<PlannerList> {
           ),
           const Divider(height: 1),
 
-          // 2. REPORT LIST
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('walkway_damage').snapshots(),
@@ -127,7 +122,6 @@ class _PlannerListState extends State<PlannerList> {
 
                 var allDocs = snapshot.data!.docs;
 
-                // State Extraction Logic (Same as before)
                 Set<String> states = {'All'};
                 for (var doc in allDocs) {
                   var data = doc.data() as Map<String, dynamic>;
@@ -143,7 +137,6 @@ class _PlannerListState extends State<PlannerList> {
                    });
                 }
 
-                // Filtering
                 var filteredList = allDocs.where((doc) {
                   var data = doc.data() as Map<String, dynamic>;
                   String state = data['state'] ?? 'Unknown';
@@ -162,7 +155,6 @@ class _PlannerListState extends State<PlannerList> {
                   return true;
                 }).toList();
 
-                // Sorting
                 filteredList.sort((a, b) {
                   Timestamp tA = (a.data() as Map<String, dynamic>)['timestamp'] ?? Timestamp.now();
                   Timestamp tB = (b.data() as Map<String, dynamic>)['timestamp'] ?? Timestamp.now();
@@ -242,7 +234,7 @@ class _PlannerListState extends State<PlannerList> {
     String reportId = data['reportId'] ?? 'N/A';
     int severity = data['severity'] ?? 0;
     
-    Color sevColor = const Color(0xFF48A89D); // Low
+    Color sevColor = const Color(0xFF48A89D); 
     if (severity >= 4) sevColor = Colors.orange;
     if (severity >= 8) sevColor = const Color(0xFFE11D48);
 

@@ -4,7 +4,8 @@ import 'planner_map.dart';
 import 'planner_list.dart';
 
 class PlannerWebShell extends StatefulWidget {
-  const PlannerWebShell({super.key});
+  final String userName; 
+  const PlannerWebShell({super.key, required this.userName});
 
   @override
   State<PlannerWebShell> createState() => _PlannerWebShellState();
@@ -13,8 +14,6 @@ class PlannerWebShell extends StatefulWidget {
 class _PlannerWebShellState extends State<PlannerWebShell> {
   int _selectedIndex = 0;
 
-  // --- NAVIGATION CALLBACK ---
-  // Allows child widgets (like Dashboard) to switch tabs (e.g., "View All")
   void _switchTab(int index) {
     setState(() => _selectedIndex = index);
   }
@@ -24,14 +23,12 @@ class _PlannerWebShellState extends State<PlannerWebShell> {
     final width = MediaQuery.of(context).size.width;
     final isLargeScreen = width > 800;
     
-    // The specific gradient you requested
     const gradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Color.fromARGB(255, 73, 83, 185), // Indigo-ish
-        // Color.fromARGB(255, 75, 148, 139), // Teal-ish
-        Color.fromARGB(255, 83, 130, 201), // Blue-ish
+        Color.fromARGB(255, 73, 83, 185), 
+        Color.fromARGB(255, 83, 130, 201),
       ],
       stops: [0.0, 1.0],
     );
@@ -39,13 +36,11 @@ class _PlannerWebShellState extends State<PlannerWebShell> {
     return Scaffold(
       body: Row(
         children: [
-          // --- 1. GRADIENT SIDEBAR ---
           Container(
             width: isLargeScreen ? 260 : 80,
             decoration: const BoxDecoration(gradient: gradient),
             child: Column(
               children: [
-                // Logo Section
                 const SizedBox(height: 40),
                 Icon(Icons.admin_panel_settings_outlined, color: Colors.white.withOpacity(0.9), size: 36),
                 if (isLargeScreen) ...[
@@ -60,8 +55,7 @@ class _PlannerWebShellState extends State<PlannerWebShell> {
                   ),
                 ],
                 const SizedBox(height: 40),
-
-                // Navigation Items
+            
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -91,7 +85,6 @@ class _PlannerWebShellState extends State<PlannerWebShell> {
                   ),
                 ),
 
-                // User Profile
                 Container(
                   padding: const EdgeInsets.all(20),
                   color: Colors.black.withOpacity(0.1),
@@ -120,10 +113,9 @@ class _PlannerWebShellState extends State<PlannerWebShell> {
             ),
           ),
 
-          // --- 2. MAIN CONTENT AREA ---
           Expanded(
             child: Container(
-              color: const Color(0xFFF1F5F9), // Slate-50 background for contrast
+              color: const Color(0xFFF1F5F9), 
               child: IndexedStack(
                 index: _selectedIndex,
                 children: [

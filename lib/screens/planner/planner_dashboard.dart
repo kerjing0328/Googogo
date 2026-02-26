@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:ui' as ui; // Import dart:ui to fix the TextDirection ambiguity
+import 'dart:ui' as ui; 
 import 'report_detail_screen.dart';
 
 class PlannerDashboard extends StatelessWidget {
@@ -8,7 +8,6 @@ class PlannerDashboard extends StatelessWidget {
 
   const PlannerDashboard({super.key, required this.onViewAll});
 
-  // --- EXPORT FUNCTION ---
   void _handleExport(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -40,7 +39,6 @@ class PlannerDashboard extends StatelessWidget {
               int sevLow = 0, sevMid = 0, sevHigh = 0;
               List<DocumentSnapshot> inboxItems = [];
               
-              // Map for Trend Data (Last 7 Days)
               Map<String, int> dailyCounts = {};
               DateTime now = DateTime.now();
               for (int i = 6; i >= 0; i--) {
@@ -69,7 +67,6 @@ class PlannerDashboard extends StatelessWidget {
                 // Trend Data Processing
                 if (data['timestamp'] != null) {
                   DateTime t = (data['timestamp'] as Timestamp).toDate();
-                  // Only count if within last 7 days
                   if (now.difference(t).inDays <= 7) {
                     String key = "${t.day}/${t.month}";
                     if (dailyCounts.containsKey(key)) {
@@ -79,7 +76,6 @@ class PlannerDashboard extends StatelessWidget {
                 }
               }
 
-              // Sort Inbox
               inboxItems.sort((a, b) {
                 Timestamp tA = (a.data() as Map<String, dynamic>)['timestamp'] ?? Timestamp.now();
                 Timestamp tB = (b.data() as Map<String, dynamic>)['timestamp'] ?? Timestamp.now();
@@ -93,7 +89,6 @@ class PlannerDashboard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 1. HEADER
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -119,7 +114,6 @@ class PlannerDashboard extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
 
-                      // 2. STATS GRID
                       LayoutBuilder(builder: (context, constraints) {
                         return Wrap(
                           spacing: 20, runSpacing: 20,
@@ -133,13 +127,11 @@ class PlannerDashboard extends StatelessWidget {
                       }),
                       const SizedBox(height: 30),
 
-                      // 3. CHARTS ROW (Parallel & Aligned)
                       SizedBox(
-                        height: 300, // Fixed height forces alignment
+                        height: 300, 
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // A. SEVERITY BAR CHART
                             Expanded(
                               flex: 3,
                               child: Container(
@@ -169,7 +161,6 @@ class PlannerDashboard extends StatelessWidget {
                             ),
                             const SizedBox(width: 20),
                             
-                            // B. RESOLUTION CARD (Aligned)
                             Expanded(
                               flex: 2,
                               child: Container(
@@ -207,7 +198,6 @@ class PlannerDashboard extends StatelessWidget {
                       
                       const SizedBox(height: 30),
 
-                      // 4. NEW TIME TREND CHART (Line Graph)
                       Container(
                         height: 250,
                         padding: const EdgeInsets.all(24),
@@ -236,7 +226,6 @@ class PlannerDashboard extends StatelessWidget {
 
                       const SizedBox(height: 40),
 
-                      // 5. INBOX LIST
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -291,7 +280,6 @@ class PlannerDashboard extends StatelessWidget {
   }
 }
 
-// --- WIDGETS ---
 
 class _StatCard extends StatelessWidget {
   final String title;
@@ -330,7 +318,6 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-// --- BAR CHART ---
 class _SimpleBarChart extends StatelessWidget {
   final Map<String, int> data;
   final List<Color> colors;
@@ -367,7 +354,6 @@ class _SimpleBarChart extends StatelessWidget {
   }
 }
 
-// --- LINE CHART (CUSTOM PAINTER) ---
 class _TrendLineChart extends StatelessWidget {
   final Map<String, int> data;
   const _TrendLineChart({required this.data});
@@ -396,20 +382,17 @@ class _ChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
       
     final Paint dotPaint = Paint()..color = color;
-    
-    // FIX: Using ui.TextDirection.ltr to avoid ambiguity
+
     final TextPainter textPainter = TextPainter(textDirection: ui.TextDirection.ltr);
 
     double maxVal = 1;
     data.forEach((_, v) => maxVal = v > maxVal ? v.toDouble() : maxVal);
     
-    // Grid Lines
     final Paint gridPaint = Paint()..color = Colors.grey.shade200..strokeWidth = 1;
     canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height), gridPaint);
     canvas.drawLine(Offset(0, 0), Offset(size.width, 0), gridPaint);
     canvas.drawLine(Offset(0, size.height/2), Offset(size.width, size.height/2), gridPaint);
 
-    // Points
     List<Offset> points = [];
     double stepX = size.width / (data.length - 1);
     int i = 0;
@@ -420,7 +403,6 @@ class _ChartPainter extends CustomPainter {
       
       points.add(Offset(x, y));
 
-      // Draw Labels
       textPainter.text = TextSpan(text: key, style: TextStyle(color: Colors.grey.shade500, fontSize: 10));
       textPainter.layout();
       textPainter.paint(canvas, Offset(x - textPainter.width/2, size.height + 5));
@@ -428,13 +410,11 @@ class _ChartPainter extends CustomPainter {
       i++;
     });
 
-    // Draw Line
     Path path = Path();
     path.moveTo(points[0].dx, points[0].dy);
     for (var p in points) path.lineTo(p.dx, p.dy);
     canvas.drawPath(path, linePaint);
 
-    // Draw Dots
     for (var p in points) {
       canvas.drawCircle(p, 4, dotPaint);
       canvas.drawCircle(p, 2, Paint()..color = Colors.white);

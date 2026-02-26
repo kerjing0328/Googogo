@@ -26,7 +26,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     _notesController = TextEditingController(text: widget.data['admin_notes'] ?? '');
   }
 
-  // --- FEATURE: ENLARGE IMAGE DIALOG ---
   void _showEnlargedImage(BuildContext context, String imageUrl) {
     showDialog(
       context: context,
@@ -36,7 +35,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         child: Stack(
           alignment: Alignment.topRight,
           children: [
-            // Interactive Viewer for Zoom/Pan
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: InteractiveViewer(
@@ -46,7 +44,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                 child: Image.network(imageUrl, fit: BoxFit.contain),
               ),
             ),
-            // Close Button
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: CircleAvatar(
@@ -88,7 +85,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     GeoPoint loc = widget.data['location'];
     int severity = widget.data['severity'] ?? 0;
     
-    // Using Solid Color instead of Gradient
     const Color primaryColor = Color(0xFF4953B9); 
 
     return GestureDetector(
@@ -113,7 +109,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // LEFT: IMAGE & MAP
                       Expanded(
                         flex: 4,
                         child: Column(
@@ -125,7 +120,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                                     fit: StackFit.expand,
                                     children: [
                                       Image.network(widget.data['imageUrl'], fit: BoxFit.cover, width: double.infinity),
-                                      // Hover/Click Hint
                                       Material(
                                         color: Colors.transparent,
                                         child: InkWell(
@@ -164,7 +158,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         ),
                       ),
                       
-                      // RIGHT: DETAILS FORM
                       Expanded(
                         flex: 5,
                         child: SingleChildScrollView(
@@ -221,7 +214,6 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   ),
                 ),
                 
-                // FOOTER
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: const BoxDecoration(border: Border(top: BorderSide(color: Colors.black12))),
@@ -230,7 +222,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     child: ElevatedButton(
                       onPressed: _isSaving ? null : _saveChanges,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor, // Solid color here
+                        backgroundColor: primaryColor, 
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

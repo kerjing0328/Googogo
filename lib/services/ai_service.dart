@@ -21,9 +21,9 @@ class AiService {
         "{"
         "'is_valid_path': boolean,"
         "'rejection_reason': 'reason if false',"
-        "'damage_type': 'hole' | 'uneven' | 'obstacle' | 'narrow' | 'clear',"
+        "'damage_type': 'hole' | 'hazards' | 'obstacle' | 'narrow' | 'crack' | 'other' | 'no path' ,"
         "'severity': (1-10 integer),"
-        "'short_desc': 'very concise description'"
+        "'short_desc': 'very concise description with potential hazards'"
         "}",
       );
 

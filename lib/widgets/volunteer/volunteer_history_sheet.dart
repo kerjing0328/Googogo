@@ -53,7 +53,6 @@ class _VolunteerHistorySheetState extends State<VolunteerHistorySheet> {
     return "Unknown";
   }
 
-  // --- HELPER: Status Color ---
   Color _getStatusColor(String? status) {
     switch (status?.toLowerCase()) {
       case 'resolved': return Colors.green;
@@ -91,7 +90,6 @@ class _VolunteerHistorySheetState extends State<VolunteerHistorySheet> {
           children: [
             Container(margin: const EdgeInsets.symmetric(vertical: 10), width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10))),
             
-            // Header with Report ID
             Padding(
               padding: const EdgeInsets.all(10), 
               child: Column(
@@ -129,7 +127,6 @@ class _VolunteerHistorySheetState extends State<VolunteerHistorySheet> {
                       child: Center(child: Text(status.toUpperCase(), style: TextStyle(color: _getStatusColor(status), fontWeight: FontWeight.bold, letterSpacing: 1.2))),
                     ),
                     const SizedBox(height: 20),
-                    // Admin Notes Section
                     if (item['admin_notes'] != null && item['admin_notes'].toString().isNotEmpty)
                       Container(
                         margin: const EdgeInsets.only(top: 20),
@@ -210,7 +207,6 @@ class _VolunteerHistorySheetState extends State<VolunteerHistorySheet> {
                                     children: [
                                       Text(item['damage_type'].toString().toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
                                       Text(item['state'] ?? "Unknown", style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                                      // Status Chip
                                       Container(
                                         margin: const EdgeInsets.only(top: 4),
                                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
