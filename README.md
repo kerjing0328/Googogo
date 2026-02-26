@@ -1,4 +1,4 @@
-# AidCess AI Pedestrian Damage Reporting & Smart Route Assistant
+# AidCess: AI Pedestrian Damage Reporting & Smart Route Assistant
 
 <img width="1920" height="1080" alt="Googogo" src="https://github.com/user-attachments/assets/c19c31d7-9b2d-427a-a3d7-ea385e5ce24b" />
 
